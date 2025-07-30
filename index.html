@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Printer Problem Predictor</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background-color: #f4f7f6;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 2em;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+        .form-group {
+            text-align: left;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+        input[type="number"] {
+            width: calc(100% - 22px); /* Account for padding and border */
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1em;
+            box-sizing: border-box; /* Include padding and border in the element's total width and height */
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 15px 25px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 3px 8px rgba(0, 123, 255, 0.2);
+        }
+        button:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+        }
+        .prediction-result {
+            margin-top: 25px;
+            padding: 20px;
+            border-radius: 8px;
+            font-size: 1.2em;
+            font-weight: bold;
+            word-wrap: break-word; /* Ensures long messages wrap */
+            box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+        }
+        .prediction-result.problem {
+            background-color: #ffebee; /* Light red */
+            color: #d32f2f; /* Darker red */
+            border: 1px solid #d32f2f;
+        }
+        .prediction-result.no-problem {
+            background-color: #e8f5e9; /* Light green */
+            color: #388e3c; /* Darker green */
+            border: 1px solid #388e3c;
+        }
+        .prediction-result.error {
+            background-color: #fff3e0; /* Light orange */
+            color: #f57c00; /* Darker orange */
+            border: 1px solid #f57c00;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>3D Printer Problem Predictor</h1>
+        <form action="/predict" method="POST">
+            <div class="form-group">
+                <label for="x-direction">X-Direction Value:</label>
+                <input type="number" id="x-direction" name="x-direction" step="any" required placeholder="e.g., 10.5">
+            </div>
+            <div class="form-group">
+                <label for="y-direction">Y-Direction Value:</label>
+                <input type="number" id="y-direction" name="y-direction" step="any" required placeholder="e.g., 5.2">
+            </div>
+            <div class="form-group">
+                <label for="z-direction">Z-Direction Value:</label>
+                <input type="number" id="z-direction" name="z-direction" step="any" required placeholder="e.g., 15.8">
+            </div>
+            <button type="submit">Predict Problem</button>
+        </form>
+
+        {% if prediction_text %}
+            <div class="prediction-result
+                {% if 'Yes' in prediction_text %}problem
+                {% elif 'No' in prediction_text %}no-problem
+                {% else %}error
+                {% endif %}">
+                {{ prediction_text }}
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>
